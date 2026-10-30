@@ -108,8 +108,8 @@ admEmpty:["دعوتی ثبت نشده است.","لا توجد دعوات.","No i
 thWho:["دعوت‌شده","المدعو","Invitee"],thType:["نوع","النوع","Type"],thBy:["دعوت‌کننده","الداعي","Invited by"],thDate:["تاریخ","التاريخ","Date"],thSt:["وضعیت","الحالة","Status"],
 stP:["در انتظار","قيد الانتظار","Pending"],stA:["تأییدشده","مقبولة","Approved"],stD:["ردشده","مرفوضة","Declined"],
 okInvDel:["دعوت حذف شد.","حُذفت الدعوة.","Invitation deleted."],okInvSt:["وضعیت ذخیره شد.","حُفظت الحالة.","Status saved."],
-authIn:["ورود","دخول","Sign in"],authOut:["خروج","خروج","Sign out"],authEmail:["ایمیل","البريد الإلكتروني","Email"],authPw:["رمز عبور","كلمة المرور","Password"],authForgot:["رمز را فراموش کرده‌ام","نسيت كلمة المرور","Forgot password"],
-authInH:["با ایمیل و رمز عبور وارد شوید. ثبت‌نام فقط با دعوت مدیر ممکن است.","سجّل الدخول بالبريد وكلمة المرور. التسجيل بدعوة من المدير فقط.","Sign in with email and password. Registration is by admin invitation only."],
+authIn:["ورود","دخول","Sign in"],authUp:["ثبت‌نام","إنشاء حساب","Sign up"],authToUp:["حساب ندارید؟ ثبت‌نام","ليس لديك حساب؟ أنشئ حساباً","No account? Sign up"],authToIn:["حساب دارید؟ ورود","لديك حساب؟ سجّل الدخول","Have an account? Sign in"],authUpH:["با ایمیل و رمز عبور (حداقل ۸ نویسه) حساب بسازید. لینک تأیید به ایمیلتان ارسال می‌شود.","أنشئ حساباً بالبريد وكلمة المرور (٨ أحرف على الأقل). سيصلك رابط تأكيد.","Create an account with email and password (min 8 characters). A confirmation link will be emailed."],authUpSent:["ثبت‌نام انجام شد. برای فعال‌سازی، لینک تأییدی که به ایمیلتان ارسال شد را باز کنید.","تم التسجيل. افتح رابط التأكيد المرسل إلى بريدك لتفعيل الحساب.","Signed up. Open the confirmation link we emailed you to activate your account."],authOut:["خروج","خروج","Sign out"],authEmail:["ایمیل","البريد الإلكتروني","Email"],authPw:["رمز عبور","كلمة المرور","Password"],authForgot:["رمز را فراموش کرده‌ام","نسيت كلمة المرور","Forgot password"],
+authInH:["با ایمیل و رمز عبور وارد شوید. اگر حساب ندارید ثبت‌نام کنید.","سجّل الدخول بالبريد وكلمة المرور. أنشئ حساباً إن لم يكن لديك.","Sign in with email and password. No account yet? Sign up below."],
 authRstT:["بازیابی رمز عبور","استعادة كلمة المرور","Reset password"],authRstH:["ایمیلت را بنویس تا لینک تعیین رمز جدید برایت ارسال شود.","اكتب بريدك لإرسال رابط كلمة مرور جديدة.","Enter your email and we'll send a link to set a new password."],authSendLink:["ارسال لینک","إرسال الرابط","Send link"],
 authSent:["ایمیل ارسال شد؛ صندوق ایمیل را ببین.","أُرسل البريد؛ تحقق من صندوقك.","Email sent. Check your inbox."],
 authBad:["ایمیل یا رمز عبور درست نیست.","البريد أو كلمة المرور غير صحيحة.","Incorrect email or password."],
@@ -489,20 +489,21 @@ function mailInvite(email,role,show,done){
  A.invite(email,role==='admin'?'admin':'user').then(function(){show(t('mailOk'),true);done()},function(e){show(t('fail',(e&&e.message)||t('unk')))})}
 var authMode='in';
 function authShow(mode){authMode=mode;var box=$('authBox');box.hidden=$('authScrim').hidden=false;
- $('authT').textContent=t(mode==='in'?'authIn':mode==='rst'?'authRstT':'authNewT');
- $('authH').textContent=t(mode==='in'?'authInH':mode==='rst'?'authRstH':'authNewH');
- $('auE').parentNode.hidden=mode==='new';$('auPwW').hidden=mode==='rst';$('auFg').hidden=mode!=='in';
- $('auP').autocomplete=mode==='new'?'new-password':'current-password';
- $('auGo').textContent=t(mode==='in'?'authIn':mode==='rst'?'authSendLink':'authSave');$('auErr').textContent='';$('auErr').className='err';
+ $('authT').textContent=t(mode==='in'?'authIn':mode==='up'?'authUp':mode==='rst'?'authRstT':'authNewT');
+ $('authH').textContent=t(mode==='in'?'authInH':mode==='up'?'authUpH':mode==='rst'?'authRstH':'authNewH');
+ $('auE').parentNode.hidden=mode==='new';$('auPwW').hidden=mode==='rst';$('auFg').hidden=mode!=='in';$('auSw').hidden=mode!=='in'&&mode!=='up';$('auSw').textContent=t(mode==='up'?'authToIn':'authToUp');
+ $('auP').autocomplete=(mode==='new'||mode==='up')?'new-password':'current-password';
+ $('auGo').textContent=t(mode==='in'?'authIn':mode==='up'?'authUp':mode==='rst'?'authSendLink':'authSave');$('auErr').textContent='';$('auErr').className='err';
  $('auX').hidden=mode==='new';setTimeout(function(){(mode==='new'?$('auP'):$('auE')).focus()},30)}
 function authHide(){$('authBox').hidden=$('authScrim').hidden=true}
 $('authBtn').onclick=function(){if(UID){window.AUTH.signOut().then(function(){location.hash='converter';location.reload()})}else authShow('in')};
 $('auX').onclick=authHide;$('authScrim').onclick=function(){if(authMode!=='new')authHide()};
-$('auFg').onclick=function(){authShow('rst')};
+$('auFg').onclick=function(){authShow('rst')};$('auSw').onclick=function(){authShow(authMode==='up'?'in':'up')};
 $('authBox').onsubmit=function(e){e.preventDefault();var A=window.AUTH,er=$('auErr');if(!A)return;er.textContent='';er.className='err';
  var em=$('auE').value.trim(),pw=$('auP').value;
  function bad(x){er.textContent=x;er.className='err'}
  if(authMode==='in')A.signIn(em,pw).then(function(){location.reload()},function(){bad(t('authBad'))});
+ else if(authMode==='up'){if(pw.length<8)return bad(t('authShort'));A.signUp(em,pw).then(function(ok){if(ok)location.reload();else{er.textContent=t('authUpSent');er.className='err ok'}},function(x){bad(t('fail',(x&&x.message)||t('unk')))})}
  else if(authMode==='rst')A.reset(em).then(function(){er.textContent=t('authSent');er.className='err ok'},function(x){bad(t('fail',(x&&x.message)||t('unk')))});
  else{if(pw.length<8)return bad(t('authShort'));A.setPassword(pw).then(function(){authHide();location.hash='converter';location.reload()},function(x){bad(t('fail',(x&&x.message)||t('unk')))})}};
 function authUI(){$('authBtn').textContent=t(UID?'authOut':'authIn')}

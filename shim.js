@@ -114,6 +114,7 @@ if (ok) {
   window.AUTH = {
     needPassword: needPassword,
     signIn: async (email, password) => { const { error } = await sb.auth.signInWithPassword({ email, password }); if (error) throw error; },
+    signUp: async (email, password) => { const { data, error } = await sb.auth.signUp({ email, password, options: { emailRedirectTo: location.origin } }); if (error) throw error; return !!data.session; },
     signOut: () => sb.auth.signOut(),
     reset: async (email) => { const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: location.origin }); if (error) throw error; },
     setPassword: async (password) => { const { error } = await sb.auth.updateUser({ password }); if (error) throw error; },
