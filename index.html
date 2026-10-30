@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Al-Husseini — currency converter with separate buy and sell rates, rate history and live admin-managed board.">
+<meta name="theme-color" content="#0b2616">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<title>Al-Husseini</title>
+<link rel="icon" href="logo.png">
+<meta name="description" content="Al-Husseini Exchange - currency buy and sell rates">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f5f2e7;--card:#fffdf7;--ink:#14281b;--muted:#5b6b5f;--line:#e2dbc2;--nav:#0b2616;--nav2:#143a22;--nav-ink:#fff;--acc:#8f6700;--acc-ink:#fff;--soft:#f1e8c8;--warn:#a1480a;--warn-bg:#fff0d6;--buy:#14722f;--sell:#b42318;--gold:#d4a90a;--on-gold:#12301c;box-sizing:border-box;padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0c1810;--card:#13241a;--ink:#f1eedd;--muted:#a1b2a5;--line:#284131;--nav:#06120b;--nav2:#0d2418;--nav-ink:#fff;--acc:#e0b63a;--acc-ink:#1a1500;--soft:#1f3425;--warn:#f5b45f;--warn-bg:#3a2a10;--buy:#4ade9b;--sell:#ff8a80;--gold:#e0b63a;--on-gold:#1a1500;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0c1810;--card:#13241a;--ink:#f1eedd;--muted:#a1b2a5;--line:#284131;--nav:#06120b;--nav2:#0d2418;--nav-ink:#fff;--acc:#e0b63a;--acc-ink:#1a1500;--soft:#1f3425;--warn:#f5b45f;--warn-bg:#3a2a10;--buy:#4ade9b;--sell:#ff8a80;--gold:#e0b63a;--on-gold:#1a1500;color-scheme:dark}
+*{box-sizing:border-box}[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Vazirmatn",Tahoma,Arial,sans-serif;line-height:1.7}
+header{background:var(--nav);color:var(--nav-ink);padding-top:env(safe-area-inset-top,0px)}
+.bar{max-width:980px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.logo{font-weight:800;font-size:1.25rem}
+nav{display:flex;gap:4px;flex-wrap:wrap}
+nav a{color:var(--nav-ink);opacity:.8;text-decoration:none;padding:6px 12px;border-radius:8px;font-size:.95rem}
+nav a:hover{opacity:1;background:rgba(255,255,255,.14)}
+.lang{margin-inline-start:auto;display:flex;gap:2px;background:rgba(255,255,255,.1);border-radius:10px;padding:2px}
+.lang button{font:inherit;font-size:.85rem;color:var(--nav-ink);background:none;border:0;border-radius:8px;padding:3px 10px;cursor:pointer;opacity:.75}
+.lang button.on{background:#fff;color:#0b2a5b;opacity:1;font-weight:600}
+.role{font-size:.82rem;padding:3px 14px;border-radius:20px;background:rgba(255,255,255,.14)}.role.adm{background:#0b7a4b}
+.hero{background:var(--nav);color:var(--nav-ink);padding:8px 16px 90px}
+.hero div{max-width:980px;margin:0 auto}
+.hero h1{margin:14px 0 4px;font-size:1.7rem;font-weight:800}.hero p{margin:0;opacity:.8}
+main{max-width:980px;margin:-70px auto 0;padding:0 16px 40px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin-bottom:20px}
+.grid{display:grid;grid-template-columns:1.1fr 1.6fr auto 1.6fr;gap:12px;align-items:end}
+label{display:block;font-size:.82rem;color:var(--muted);margin-bottom:4px}
+input,select{width:100%;font:inherit;font-size:1.05rem;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:11px 12px;min-height:48px}
+input:focus-visible,select:focus-visible,button:focus-visible,a:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.ltr{direction:ltr;text-align:left;font-variant-numeric:tabular-nums}
+.swap{font:inherit;font-size:1.3rem;height:48px;width:48px;border-radius:50%;border:1px solid var(--line);background:var(--soft);color:var(--acc);cursor:pointer}
+.res{margin-top:20px;display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+.from{color:var(--muted);direction:ltr}.to{font-size:2.3rem;font-weight:800;direction:ltr;overflow-wrap:anywhere;line-height:1.25}
+.pair{direction:ltr;text-align:left;font-size:.92rem}.pair .m{color:var(--muted);font-size:.82rem}
+.tag{display:inline-block;background:var(--soft);color:var(--acc);border-radius:20px;padding:2px 12px;font-size:.8rem;font-weight:600;margin-top:4px}.tag.man{background:var(--warn-bg);color:var(--warn)}
+.how{margin-top:16px;background:var(--bg);border-radius:12px;padding:12px 14px;font-size:.9rem;color:var(--muted)}
+.bu{color:var(--buy);font-weight:600}.se{color:var(--sell);font-weight:600}
+.manual{margin-top:14px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.manual>label{margin:0;color:var(--ink);font-size:.95rem;display:flex;gap:8px;align-items:center;cursor:pointer}
+.manual input[type=checkbox]{width:20px;min-height:20px;height:20px}
+.manual .r{flex:1;min-width:200px;display:none}.manual.on .r{display:block}
+h2{font-size:1.15rem;margin:0 0 4px}.hint{color:var(--muted);font-size:.88rem;margin:0 0 14px}
+.pop{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.pop button{font:inherit;text-align:start;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;color:var(--ink)}
+.pop button:hover{border-color:var(--acc)}
+.pop b,.pop span{display:block;direction:ltr;text-align:left}[dir=rtl] .pop b,[dir=rtl] .pop span{text-align:right}
+.pop span{color:var(--muted);font-size:.82rem}
+.tw{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:520px}
+th,td{padding:10px 8px;text-align:start;border-bottom:1px solid var(--line);font-size:.95rem}th{color:var(--muted);font-weight:600;font-size:.82rem}
+td.n,th.n{direction:ltr;text-align:left;font-variant-numeric:tabular-nums}
+td.n.b{color:var(--buy);font-weight:600}td.n.s{color:var(--sell);font-weight:600}
+td input{min-height:38px;padding:6px 8px;font-size:.95rem;max-width:130px}
+.btn{font:inherit;font-weight:600;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:9px 16px;cursor:pointer}
+.btn.p{background:var(--acc);color:var(--acc-ink);border-color:var(--acc)}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.note{background:var(--warn-bg);color:var(--warn);border-radius:10px;padding:10px 14px;font-size:.88rem;margin-top:14px}
+.bad{border-color:var(--sell)}
+.add{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:16px}.add h3{margin:0 0 4px;font-size:1rem}
+.af{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;align-items:end}
+.err{min-height:1.4em;margin-top:8px;font-size:.88rem;color:var(--sell)}.err.ok{color:var(--buy)}
+.del{font:inherit;color:var(--sell);background:none;border:0;cursor:pointer;padding:4px 10px;min-height:40px;min-width:44px}
+.dl{opacity:.9;margin-top:6px!important;font-size:.95rem}
+.hc{display:flex;gap:12px;align-items:end;flex-wrap:wrap;margin-bottom:12px}.hc>div:first-child{min-width:220px;flex:1}
+.rng{display:flex;gap:6px}.rng button{font:inherit;font-size:.88rem;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;padding:8px 12px;min-height:44px;cursor:pointer}.rng button.on{background:var(--acc);color:var(--acc-ink);border-color:var(--acc)}
+.sum{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0}.sum div{background:var(--bg);border-radius:10px;padding:6px 12px;font-size:.88rem}
+.tip{min-height:1.7em;direction:ltr;text-align:left;font-size:.88rem;color:var(--muted)}
+.fc{position:relative}.fc>button:first-child{width:100%;padding-inline-end:38px}
+.pop .fx{position:absolute;top:4px;inset-inline-end:4px;width:auto;min-width:40px;min-height:40px;background:none;border:0;border-radius:8px;padding:6px 9px;color:var(--muted);font-size:1rem;line-height:1}.pop .fx:hover{color:var(--sell);border:0}
+.favbar{margin-top:14px}.favbar .btn{display:inline-flex;gap:8px;align-items:center}.favbar .btn[aria-pressed=true] #favIc{color:#e0a100}
+header{position:sticky;top:0;z-index:30}
+.bar nav{order:5;flex:1 1 100%;flex-wrap:nowrap;overflow-x:auto;white-space:nowrap;gap:2px;scrollbar-width:none;margin:0 -4px;padding-bottom:2px}
+.bar nav::-webkit-scrollbar{display:none}
+nav a[aria-current=page]{opacity:1;background:rgba(255,255,255,.2);font-weight:600}
+nav a[href="#converter"]::before{content:"\1F4B1\00a0"}nav a[href="#favs"]::before{content:"\2B50\00a0"}nav a[href="#board"]::before{content:"\1F4CB\00a0"}nav a[href="#board2"]::before{content:"\1F3E6\00a0"}nav a[href="#history"]::before{content:"\1F4C8\00a0"}nav a[href="#popular"]::before{content:"\1F525\00a0"}nav a[href="#cross"]::before{content:"\1F500\00a0"}nav a[href="#edit"]::before{content:"\2699\FE0F\00a0"}
+.card.off{display:none}
+body:not(.home) .hero{display:none}body:not(.home) main{margin-top:20px}
+.bar nav{display:none}
+.bnav{position:fixed;inset-inline:0;bottom:0;z-index:40;display:flex;background:var(--card);border-top:1px solid var(--line);padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px));box-shadow:0 -4px 16px rgba(0,0,0,.08)}
+.bnav a,.bnav button{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:2px;font:inherit;font-size:.68rem;line-height:1.2;color:var(--muted);opacity:1;background:none;border:0;border-radius:10px;padding:6px 2px;text-decoration:none;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bnav a::before,.bnav .mi{display:block;font-size:1.3rem;line-height:1.2;filter:grayscale(1);opacity:.7}
+.bnav a[aria-current=page],.bnav button.on{color:var(--acc);font-weight:600;background:var(--soft)}
+.bnav a[aria-current=page]::before,.bnav button.on .mi{filter:none;opacity:1}
+.bnav a:hover{background:var(--soft);opacity:1}
+.sheet{position:fixed;inset-inline:12px;bottom:calc(78px + env(safe-area-inset-bottom,0px));z-index:45;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:6px;box-shadow:0 8px 28px rgba(0,0,0,.25);display:flex;flex-direction:column;max-width:420px;margin-inline:auto}
+.sheet a{color:var(--ink);opacity:1;padding:12px 14px;border-radius:10px;font-size:1rem}.sheet a:hover,.sheet a[aria-current=page]{background:var(--soft);color:var(--acc);opacity:1}
+.scrim{position:fixed;inset:0;z-index:42;background:rgba(0,0,0,.3)}
+footer{margin-bottom:calc(76px + env(safe-area-inset-bottom,0px))}
+.bnav a,.bnav button{white-space:normal;overflow:visible;text-overflow:clip;text-align:center}
+.mv{font:inherit;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;width:38px;height:38px;margin-inline-end:4px;cursor:pointer}.mv:disabled{opacity:.3;cursor:default}
+.logo img{display:block;height:58px;width:auto;background:none;border-radius:0;padding:0}
+.hero{background:linear-gradient(180deg,var(--nav) 0%,var(--nav2) 100%)}
+header{border-bottom:3px solid var(--gold)}
+.hero h1{color:var(--gold)}
+.lang button.on{background:var(--gold);color:var(--on-gold)}
+.role.adm{background:var(--gold);color:var(--on-gold);font-weight:600}
+.btn.p,.rng button.on{background:var(--gold);color:var(--on-gold);border-color:var(--gold)}
+.btn.p:hover{filter:brightness(1.06)}
+.swap{border-color:var(--gold)}
+.card{border-top:3px solid var(--gold)}
+.bnav{border-top-color:var(--gold)}
+.lst{list-style:none;margin:0;padding:0}.lst li{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px 12px;margin-bottom:6px;font-size:.92rem}.lst small{display:block;color:var(--muted)}
+#role{cursor:pointer}
+select.st{min-height:40px;padding:4px 8px;font-size:.9rem;max-width:140px}
+a.btn{display:inline-block;text-decoration:none}
+.lg{display:flex;gap:16px;font-size:.85rem;margin:6px 0 10px}
+footer{text-align:center;color:var(--muted);font-size:.85rem;padding:0 16px 32px}
+@media(max-width:700px){.grid{grid-template-columns:1fr 1fr}.grid .amt{grid-column:1/-1}.swap{grid-column:1/-1;justify-self:center;transform:rotate(90deg)}.to{font-size:1.8rem}}
+</style>
+</head>
+<body>
+<header><div class="bar"><div class="logo"><img decoding="async" src="logo.png" alt="الحسینی — مکتب السید" width="33" height="58"></div>
+<span class="lang" role="group" aria-label="Language"><button type="button" data-l="fa">فارسی</button><button type="button" data-l="ar">العربية</button><button type="button" data-l="en">English</button></span>
+<span class="role" id="role" role="button" tabindex="0"></span><button type="button" class="role" id="authBtn" style="border:0;color:inherit;font:inherit;cursor:pointer"></button></div></header>
+
+<div class="hero"><div><h1 data-i="h1"></h1><p data-i="hp"></p><p class="dl" id="dates"></p></div></div>
+
+<main>
+<section class="card" id="converter">
+  <div class="grid">
+    <div class="amt"><label for="amt" data-i="amount"></label><input id="amt" class="ltr" inputmode="decimal" value="1000" autocomplete="off"></div>
+    <div><label for="from" data-i="give"></label><select id="from"></select></div>
+    <button class="swap" id="swap" type="button">⇄</button>
+    <div><label for="to" data-i="get"></label><select id="to"></select></div>
+  </div>
+  <div class="res" aria-live="polite">
+    <div><div class="from" id="fromTxt"></div><div class="to" id="toTxt">—</div></div>
+    <div class="pair"><div id="p1"></div><div id="p2"></div><div class="m" id="p3"></div><span class="tag" id="tag"></span></div>
+  </div>
+  <div class="favbar"><button class="btn" id="favBtn" type="button" aria-pressed="false"><span id="favIc">☆</span><span id="favTx"></span></button></div>
+  <div class="how" id="how"></div>
+  <div class="manual" id="man">
+    <label><input type="checkbox" id="useMan"><span data-i="manChk"></span></label>
+    <div class="r"><label for="manRate" id="manLbl"></label><input id="manRate" class="ltr" inputmode="decimal" autocomplete="off"></div>
+  </div>
+</section>
+
+<section class="card" id="favs"><h2 data-i="favT"></h2><p class="hint" data-i="favH"></p><div class="pop" id="favL"></div><p class="hint" id="favE" data-i="favEmpty"></p></section>
+
+<section class="card" id="board"><h2 data-i="boardT"></h2><p class="hint" data-i="boardH"></p>
+<div class="tw"><table><thead><tr><th data-i="thCur"></th><th data-i="thCode"></th><th class="n" data-i="thBuy"></th><th class="n" data-i="thSell"></th><th class="n" data-i="thSpr"></th></tr></thead><tbody id="bb"></tbody></table></div></section>
+
+<section class="card" id="board2"><h2 id="b2T"></h2><p class="hint" id="b2H"></p>
+<div class="hc"><div><label for="b2Base" data-i="b2Base"></label><select id="b2Base"></select></div></div>
+<div class="row" id="b2Ctl" hidden><button class="btn" id="b2Ed" type="button" data-i="b2Ed"></button><button class="btn p" id="b2Sv" type="button" data-i="b2Sv" hidden></button><button class="btn" id="b2Cn" type="button" data-i="b2Cn" hidden></button><button class="btn" id="b2Rs" type="button" data-i="b2Rs" hidden></button></div><p class="hint" id="b2Hint" data-i="b2Hint" hidden></p><div class="err" id="b2E" aria-live="polite"></div>
+<div class="tw"><table><thead><tr><th data-i="thCur"></th><th data-i="thCode"></th><th class="n" data-i="thBuy"></th><th class="n" data-i="thSell"></th><th class="n" data-i="thSpr"></th><th></th></tr></thead><tbody id="b2b"></tbody></table></div></section>
+
+<section class="card" id="history"><h2 data-i="histT"></h2><p class="hint" data-i="histH"></p>
+<div class="hc"><div><label for="hCur" data-i="thCur"></label><select id="hCur"></select></div><div style="min-width:200px;flex:1"><label for="hCur2" data-i="hVs"></label><select id="hCur2"></select></div><div class="rng" id="rng"><button type="button" data-r="7" data-i="r7"></button><button type="button" data-r="30" data-i="r30"></button><button type="button" data-r="90" data-i="r90"></button><button type="button" data-r="0" data-i="rAll"></button></div></div>
+<div class="sum" id="hSum"></div><p class="hint" id="hEmpty" hidden></p><div class="tip" id="hTip"></div>
+<svg id="chart" viewBox="0 0 700 260" role="img" aria-label="chart" style="width:100%;height:auto;direction:ltr;touch-action:pan-y"></svg>
+<div class="lg"><span class="bu">■ <span id="lgB" data-i="thBuy"></span></span><span class="se">■ <span id="lgS" data-i="thSell"></span></span></div>
+<div class="tw"><table><thead><tr><th data-i="calG"></th><th data-i="calJ"></th><th class="n" id="thHB" data-i="thBuy"></th><th class="n" id="thHS" data-i="thSell"></th><th class="n" data-i="thChg"></th><th></th></tr></thead><tbody id="hb"></tbody></table></div></section>
+
+<section class="card" id="popular"><h2 data-i="popT"></h2><p class="hint" data-i="popH"></p><div class="pop" id="pop"></div></section>
+
+<section class="card" id="cross"><h2 id="tTitle"></h2><p class="hint" id="tHint"></p>
+<div class="tw"><table><thead><tr><th data-i="thCur"></th><th data-i="thCode"></th><th class="n" data-i="thFwd"></th><th class="n" data-i="thRev"></th><th class="n" data-i="thAmt"></th></tr></thead><tbody id="tb"></tbody></table></div></section>
+
+<section class="card" id="account"><h2 data-i="accT"></h2><p class="hint" data-i="accH"></p>
+<div class="sum"><div><span data-i="accNameL"></span>: <b id="accName">—</b></div><div><span data-i="accRoleL"></span>: <b id="accRole"></b></div></div>
+<p class="how" id="accLv"></p>
+<div class="add" id="invForm"><h3 data-i="invT"></h3><p class="hint" data-i="invH"></p><div class="af">
+ <div><label for="uiC" data-i="invContact"></label><input id="uiC" maxlength="80" autocomplete="off"></div>
+ <div><label for="uiN" data-i="invNote"></label><input id="uiN" maxlength="200" autocomplete="off"></div>
+ <button class="btn p" id="uiB" type="button" data-i="invSend"></button>
+</div><div class="err" id="uiE" aria-live="polite"></div></div>
+<p class="note" id="invDeny" hidden></p>
+<h3 style="margin:18px 0 6px;font-size:1rem" data-i="myInvT"></h3><ul class="lst" id="myL"></ul><p class="hint" id="myE" data-i="myInvE"></p>
+<div class="add" style="margin-top:16px"><h3 data-i="shT"></h3><p class="hint" data-i="shH"></p>
+<textarea id="shMsg" readonly rows="4" aria-label="invite message" style="width:100%;font:inherit;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:10px"></textarea>
+<div class="row"><button class="btn p" id="shCopy" type="button" data-i="copy"></button><button class="btn" id="shShare" type="button" data-i="share" hidden></button></div></div></section>
+
+<section class="card" id="adminp" hidden><h2 data-i="admT"></h2><p class="hint" data-i="admH"></p>
+<div class="note" data-i="admHow"></div>
+<div class="row"><a class="btn" href="#edit" data-i="nEdit"></a></div>
+<div class="add" style="margin-top:16px"><h3 data-i="admNewT"></h3><div class="af">
+ <div><label for="aiC" data-i="invContact"></label><input id="aiC" maxlength="80" autocomplete="off"></div>
+ <div><label for="aiR" data-i="admRole"></label><select id="aiR"><option value="user"></option><option value="admin"></option></select></div>
+ <div><label for="aiN" data-i="invNote"></label><input id="aiN" maxlength="200" autocomplete="off"></div>
+ <button class="btn p" id="aiB" type="button" data-i="invSend"></button><button class="btn" id="aiMail" type="button" data-i="mailBtn"></button>
+</div><div class="err" id="aiE" aria-live="polite"></div></div>
+<h3 style="margin:18px 0 6px;font-size:1rem"><span data-i="admInbox"></span> — <span id="admCnt"></span></h3>
+<div class="tw"><table><thead><tr><th data-i="thWho"></th><th data-i="thType"></th><th data-i="thBy"></th><th data-i="thDate"></th><th data-i="thSt"></th><th></th></tr></thead><tbody id="invB"></tbody></table></div>
+<p class="hint" id="invE" data-i="admEmpty"></p></section>
+
+<section class="card" id="edit" hidden><h2 data-i="editT"></h2><p class="hint" data-i="editH"></p>
+<div class="add" id="add"><h3 data-i="addT"></h3><p class="hint" data-i="addH"></p>
+<div class="af">
+ <div><label for="nc" data-i="lCode"></label><input id="nc" class="ltr" maxlength="12" placeholder="KWD" autocomplete="off"></div>
+ <div><label for="nn" data-i="lName"></label><input id="nn" maxlength="30" data-ph="phName" autocomplete="off"></div>
+ <div><label for="nf" data-i="lFlag"></label><input id="nf" maxlength="8" placeholder="🇰🇼" autocomplete="off"></div>
+ <div><label for="nb" data-i="thBuyUsd"></label><input id="nb" class="ltr" inputmode="decimal" placeholder="0.305" autocomplete="off"></div>
+ <div><label for="ns" data-i="thSellUsd"></label><input id="ns" class="ltr" inputmode="decimal" placeholder="0.309" autocomplete="off"></div>
+ <button class="btn p" id="addB" type="button" data-i="addB"></button>
+</div><div class="err" id="addE" aria-live="polite"></div></div>
+<div class="add" id="bh"><h3 data-i="bhT"></h3><p class="hint" data-i="bhH"></p><div class="af">
+ <div><label for="bhC" data-i="thCur"></label><select id="bhC"></select></div>
+ <div><label for="bhD" data-i="bhDate"></label><input id="bhD" class="ltr" placeholder="2026-10-01 / 1405/07/09" autocomplete="off"></div>
+ <div><label for="bhT2" data-i="bhTime"></label><input id="bhT2" type="time" value="12:00"></div>
+ <div><label for="bhB" data-i="thBuyUsd"></label><input id="bhB" class="ltr" inputmode="decimal" autocomplete="off"></div>
+ <div><label for="bhS" data-i="thSellUsd"></label><input id="bhS" class="ltr" inputmode="decimal" autocomplete="off"></div>
+ <button class="btn p" id="bhAdd" type="button" data-i="bhAdd"></button>
+</div><div class="err" id="bhE" aria-live="polite"></div></div>
+<div class="tw"><table><thead><tr><th data-i="thCur"></th><th data-i="thCode"></th><th class="n" data-i="thBuyUsd"></th><th class="n" data-i="thSellUsd"></th><th></th></tr></thead><tbody id="eb"></tbody></table></div>
+<div class="row"><button class="btn p" id="saveR" type="button" data-i="save"></button><button class="btn" id="resetR" type="button" data-i="reset"></button></div>
+<div class="note" data-i="note"></div></section>
+</main>
+<div class="scrim" id="authScrim" hidden style="z-index:60"></div>
+<form class="sheet" id="authBox" hidden style="z-index:61;bottom:auto;top:12vh;padding:18px;gap:10px" autocomplete="on">
+<h2 id="authT" style="margin:0"></h2><p class="hint" id="authH" style="margin:0"></p>
+<div><label for="auE" data-i="authEmail"></label><input id="auE" type="email" class="ltr" autocomplete="email"></div>
+<div id="auPwW"><label for="auP" data-i="authPw"></label><input id="auP" type="password" class="ltr" autocomplete="current-password" minlength="8"></div>
+<div class="err" id="auErr" aria-live="polite"></div>
+<div class="row" style="margin:0"><button class="btn p" id="auGo" type="submit"></button><button class="btn" id="auX" type="button" data-i="b2Cn"></button></div>
+<button class="btn" id="auFg" type="button" style="border:0;background:none;color:var(--acc);text-align:start;padding:0" data-i="authForgot"></button>
+</form>
+<footer data-i="foot"></footer>
+<nav class="bnav" aria-label="Main"><a href="#converter" data-i="nConv"></a><a href="#favs" data-i="nFav"></a><a href="#board2" data-i="nBoard2"></a><a href="#history" data-i="nHist"></a><button type="button" id="moreB" aria-haspopup="true" aria-expanded="false"><span class="mi">⋯</span><span data-i="nMore"></span></button></nav>
+<div class="scrim" id="scrim" hidden></div>
+<nav class="sheet" id="sheet" aria-label="More" hidden><a href="#board" data-i="nBoard"></a><a href="#popular" data-i="nPop"></a><a href="#cross" data-i="nCross"></a><a href="#account" data-i="nAcc"></a><a href="#adminp" id="sA" data-i="nAdmP"></a><a href="#edit" id="sE" data-i="nEdit"></a></nav>
+
+<script src="config.js"></script>
+<script type="module" src="shim.js"></script>
+<script src="app.js" defer></script>
+</body>
+</html>

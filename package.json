@@ -1,0 +1,10 @@
+{
+  "name": "alhosseini-ex",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Al-Husseini exchange - currency buy/sell rates",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.0"
+  }
+}
