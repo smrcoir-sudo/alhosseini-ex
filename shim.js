@@ -7,6 +7,7 @@ const ok = cfg.SUPABASE_URL && cfg.SUPABASE_ANON_KEY && !/^YOUR_/.test(cfg.SUPAB
 
 if (ok) {
   const needPassword = /type=(invite|recovery)/.test(location.hash);
+  const signedUp = /type=signup/.test(location.hash);
   const sb = createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY, {
     auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
   });
@@ -113,6 +114,7 @@ if (ok) {
 
   window.AUTH = {
     needPassword: needPassword,
+    signedUp: signedUp,
     signIn: async (email, password) => { const { error } = await sb.auth.signInWithPassword({ email, password }); if (error) throw error; },
     signUp: async (email, password) => { const { data, error } = await sb.auth.signUp({ email, password, options: { emailRedirectTo: location.origin } }); if (error) throw error; return !!data.session; },
     signOut: () => sb.auth.signOut(),
