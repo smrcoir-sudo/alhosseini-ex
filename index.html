@@ -215,7 +215,8 @@ footer{text-align:center;color:var(--muted);font-size:.85rem;padding:0 16px 32px
  <div><label for="bhS" data-i="thSellUsd"></label><input id="bhS" class="ltr" inputmode="decimal" autocomplete="off"></div>
  <button class="btn p" id="bhAdd" type="button" data-i="bhAdd"></button>
 </div><div class="err" id="bhE" aria-live="polite"></div></div>
-<div class="tw"><table><thead><tr><th data-i="thCur"></th><th data-i="thCode"></th><th class="n" data-i="thBuyUsd"></th><th class="n" data-i="thSellUsd"></th><th></th></tr></thead><tbody id="eb"></tbody></table></div>
+<div class="row"><button class="btn" id="eInv" type="button" aria-pressed="false" data-i="eInv"></button></div><p class="hint" id="eInvH" hidden data-i="eInvH"></p>
+<div class="tw"><table><thead><tr><th data-i="thCur"></th><th data-i="thCode"></th><th class="n" id="eThB"></th><th class="n" id="eThS"></th><th></th></tr></thead><tbody id="eb"></tbody></table></div>
 <div class="row"><button class="btn p" id="saveR" type="button" data-i="save"></button><button class="btn" id="resetR" type="button" data-i="reset"></button></div>
 <div class="note" data-i="note"></div></section>
 </main>

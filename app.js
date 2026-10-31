@@ -70,7 +70,7 @@ favEmpty:["هنوز جفت‌ارزی ذخیره نکرده‌اید. در مب�
 nBoard2:["تابلوی متفرقه","لوحة متنوعة","Other board"],
 b2T:["تابلوی نرخ (مبنا {0})","لوحة الأسعار (الأساس {0})","Rate board ({0} base)"],
 b2H:["قیمت ۱ واحد از هر ارز به {0}. نرخ خرید: صرافی ارز را از شما می‌خرد و {0} می‌دهد. نرخ فروش: ارز را به شما می‌فروشد و در برابرش {0} می‌گیرد.","سعر وحدة واحدة من كل عملة بـ{0}. سعر الشراء: يشتري الصرّاف العملة منك ويدفع لك {0}. سعر البيع: يبيعك العملة ويأخذ منك {0}.","Price of 1 unit of each currency in {0}. Buy rate: the exchange office buys the currency from you and pays {0}. Sell rate: it sells you the currency and you pay {0}."],
-b2Inv:["⇄ برعکس کردن ارزها","⇄ عكس العملات","⇄ Invert pairs"],b2TI:["تابلوی نرخ (۱ {0} به ارزهای دیگر)","لوحة الأسعار (١ {0} بالعملات الأخرى)","Rate board (1 {0} in other currencies)"],b2HI:["قیمت ۱ واحد {0} به هر ارز. نرخ خرید: صرافی {0} را از شما می‌خرد و ارز مقابل را می‌دهد. نرخ فروش: {0} را به شما می‌فروشد و ارز مقابل را می‌گیرد.","سعر وحدة واحدة من {0} بكل عملة. سعر الشراء: يشتري الصرّاف {0} منك ويدفع لك العملة المقابلة. سعر البيع: يبيعك {0} ويأخذ منك العملة المقابلة.","Price of 1 unit of {0} in each currency. Buy rate: the exchange office buys {0} from you and pays the other currency. Sell rate: it sells you {0} and you pay the other currency."],b2Base:["ارز مبنا","العملة الأساسية","Base currency"],
+eInv:["⇄ برعکس کردن ارزها","⇄ عكس العملات","⇄ Invert pairs"],eInvH:["نرخ‌ها به‌صورت «ارز / دلار» نمایش داده می‌شوند: قیمت ۱ واحد ارز به دلار. خرید و فروش هم معکوس محاسبه می‌شوند. ذخیره، مقدارهای دلاری را به‌روز می‌کند.","تُعرض الأسعار بصيغة «العملة / الدولار»: سعر وحدة واحدة من العملة بالدولار. يُحسب الشراء والبيع بشكل معكوس. الحفظ يحدّث قيم الدولار.","Rates are shown as “currency / USD”: the price of 1 unit of the currency in USD. Buy and sell are inverted accordingly. Saving updates the USD values."],thBuyCur:["خرید ارز","شراء العملة","Buy currency"],thSellCur:["فروش ارز","بيع العملة","Sell currency"],b2Inv:["⇄ برعکس کردن ارزها","⇄ عكس العملات","⇄ Invert pairs"],b2TI:["تابلوی نرخ (۱ {0} به ارزهای دیگر)","لوحة الأسعار (١ {0} بالعملات الأخرى)","Rate board (1 {0} in other currencies)"],b2HI:["قیمت ۱ واحد {0} به هر ارز. نرخ خرید: صرافی {0} را از شما می‌خرد و ارز مقابل را می‌دهد. نرخ فروش: {0} را به شما می‌فروشد و ارز مقابل را می‌گیرد.","سعر وحدة واحدة من {0} بكل عملة. سعر الشراء: يشتري الصرّاف {0} منك ويدفع لك العملة المقابلة. سعر البيع: يبيعك {0} ويأخذ منك العملة المقابلة.","Price of 1 unit of {0} in each currency. Buy rate: the exchange office buys {0} from you and pays the other currency. Sell rate: it sells you {0} and you pay the other currency."],b2Base:["ارز مبنا","العملة الأساسية","Base currency"],
 nMore:["بیشتر","المزيد","More"],
 b2Ed:["ویرایش ترتیب","تعديل الترتيب","Edit order"],b2Sv:["ذخیره ترتیب","حفظ الترتيب","Save order"],b2Cn:["انصراف","إلغاء","Cancel"],b2Rs:["ترتیب پیش‌فرض","الترتيب الافتراضي","Default order"],
 b2Hint:["با فلش‌ها اولویت نمایش ارزها را تعیین کنید. این ترتیب برای همه کاربران اعمال می‌شود.","استخدم الأسهم لتحديد أولوية عرض العملات. يُطبّق الترتيب على جميع المستخدمين.","Use the arrows to set the display priority of the currencies. The order applies to all users."],
@@ -167,9 +167,9 @@ function pop(){var b=$('pop');b.innerHTML='';PL=P.filter(function(p){return info
  PL.forEach(function(p){var x=document.createElement('button');x.type='button';x.innerHTML='<b>'+p[0]+' → '+p[1]+'</b><span></span>';
   x.onclick=function(){$('from').value=p[0];$('to').value=p[1];$('useMan').checked=false;all();$('converter').scrollIntoView({behavior:'smooth'})};b.appendChild(x)})}
 function popUpd(){if(PG!=='popular')return;var bs=$('pop').children;for(var i=0;i<bs.length;i++)bs[i].lastChild.textContent='1 '+PL[i][0]+' = '+f(rate(PL[i][0],PL[i][1]))+' '+PL[i][1]}
-function edit(){if(PG!=='edit')return;var eb=$('eb');eb.innerHTML='';C.forEach(function(c){
- var tr=document.createElement('tr');tr.innerHTML='<td>'+lab(c)+'</td><td>'+c[0]+'</td><td class="n"></td><td class="n"></td>';
- ['b','s'].forEach(function(k,j){var i=document.createElement('input');i.className='ltr';i.addEventListener('input',function(){fmtAmt(this)});i.inputMode='decimal';i.value=f(R[c[0]][k],8);i.dataset.c=c[0];i.dataset.k=k;i.setAttribute('aria-label',c[0]+' '+t(k==='b'?'thBuyUsd':'thSellUsd'));if(c[0]==='USD')i.disabled=true;tr.children[2+j].appendChild(i)});
+function edit(){if(PG!=='edit')return;var eb=$('eb');eb.innerHTML='';$('eThB').textContent=t(eInv?'thBuyCur':'thBuyUsd');$('eThS').textContent=t(eInv?'thSellCur':'thSellUsd');$('eInv').setAttribute('aria-pressed',eInv?'true':'false');$('eInv').style.background=eInv?'var(--soft)':'';$('eInvH').hidden=!eInv;C.forEach(function(c){
+ var tr=document.createElement('tr');tr.innerHTML='<td>'+lab(c)+'</td><td class="ltr">'+(eInv?c[0]+'/USD':'USD/'+c[0])+'</td><td class="n"></td><td class="n"></td>';
+ ['b','s'].forEach(function(k,j){var i=document.createElement('input');i.className='ltr';i.addEventListener('input',function(){fmtAmt(this)});i.inputMode='decimal';var sk=eInv?(k==='b'?'s':'b'):k;i.value=f(eInv?1/R[c[0]][sk]:R[c[0]][k],8);i.dataset.o=i.value;i.dataset.c=c[0];i.dataset.k=sk;i.setAttribute('aria-label',c[0]+' '+t(k==='b'?(eInv?'thBuyCur':'thBuyUsd'):(eInv?'thSellCur':'thSellUsd')));if(c[0]==='USD')i.disabled=true;tr.children[2+j].appendChild(i)});
  var dt=document.createElement('td');if(c[0]!=='USD'){var d=document.createElement('button');d.type='button';d.className='del';d.textContent=t('del');d.setAttribute('aria-label',t('del')+' '+c[0]);d.onclick=function(){delCur(c[0])};dt.appendChild(d)}
  tr.appendChild(dt);eb.appendChild(tr)})}
 function all(){calc();board();board2();popUpd();favUI()}
@@ -236,10 +236,11 @@ function addCur(){
  ensureSeed().then(function(){return col.doc(code).set({n:name,f:flag,b:b,s:s,o:C.length}).then(function(){return hAdd(code,b,s)})}).then(function(){
   ['nc','nn','nf','nb','ns'].forEach(function(id){$(id).value=''});msg(t('okAdd',code),true)},wErr)}
 $('addB').onclick=addCur;
+$('eInv').onclick=function(){eInv=!eInv;try{localStorage.setItem('einv',eInv?'1':'0')}catch(e){}edit()};
 $('saveR').onclick=function(){
  if(!canWrite())return;
  var N={},bad=false;
- $('eb').querySelectorAll('input').forEach(function(i){var v=parseFloat(norm(i.value));if(!(v>0)){bad=true;i.classList.add('bad')}else{i.classList.remove('bad');(N[i.dataset.c]=N[i.dataset.c]||{})[i.dataset.k]=v}});
+ $('eb').querySelectorAll('input').forEach(function(i){var v=parseFloat(norm(i.value));if(!(v>0)){bad=true;i.classList.add('bad')}else{i.classList.remove('bad');var kk=i.dataset.k,cc=i.dataset.c;if(eInv)v=(i.value===i.dataset.o&&R[cc])?R[cc][kk]:1/v;(N[cc]=N[cc]||{})[kk]=v}});
  if(bad)return msg(t('ePos'));
  var jobs=[];
  for(var k in N){var o=N[k];if(o.s<o.b)return msg(t('eSellK',k));if(R[k]&&(o.b!==R[k].b||o.s!==R[k].s))jobs.push([k,o])}
@@ -348,7 +349,7 @@ function favUI(){
 $('favBtn').onclick=function(){var s=cur();if(s.f===s.t)return;var i=favIdx(s.f,s.t);if(i>-1)FAV.splice(i,1);else{if(FAV.length>=20)FAV.shift();FAV.push([s.f,s.t])}favSave();favUI()};
 
 // ---------- board with a selectable base (default: Iraqi dinar) ----------
-var b2='IQD',b2Inv=false;try{b2Inv=localStorage.getItem('b2inv')==='1'}catch(e){}
+var b2='IQD',b2Inv=false,eInv=false;try{eInv=localStorage.getItem('einv')==='1'}catch(e){}try{b2Inv=localStorage.getItem('b2inv')==='1'}catch(e){}
 function b2Opts(){var s=$('b2Base'),p=s.value||b2;s.innerHTML='';C.forEach(function(c){var o=document.createElement('option');o.value=c[0];o.textContent=lab(c)+' — '+c[0];s.appendChild(o)});s.value=info(p)?p:(info('IQD')?'IQD':'USD');b2=s.value}
 $('b2Base').onchange=function(){b2=this.value;board2()};
 $('b2Inv').onclick=function(){b2Inv=!b2Inv;try{localStorage.setItem('b2inv',b2Inv?'1':'0')}catch(e){}board2()};
