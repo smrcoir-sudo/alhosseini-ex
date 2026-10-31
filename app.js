@@ -70,7 +70,7 @@ favEmpty:["هنوز جفت‌ارزی ذخیره نکرده‌اید. در مب�
 nBoard2:["تابلوی متفرقه","لوحة متنوعة","Other board"],
 b2T:["تابلوی نرخ (مبنا {0})","لوحة الأسعار (الأساس {0})","Rate board ({0} base)"],
 b2H:["قیمت ۱ واحد از هر ارز به {0}. نرخ خرید: صرافی ارز را از شما می‌خرد و {0} می‌دهد. نرخ فروش: ارز را به شما می‌فروشد و در برابرش {0} می‌گیرد.","سعر وحدة واحدة من كل عملة بـ{0}. سعر الشراء: يشتري الصرّاف العملة منك ويدفع لك {0}. سعر البيع: يبيعك العملة ويأخذ منك {0}.","Price of 1 unit of each currency in {0}. Buy rate: the exchange office buys the currency from you and pays {0}. Sell rate: it sells you the currency and you pay {0}."],
-b2Base:["ارز مبنا","العملة الأساسية","Base currency"],
+b2Inv:["⇄ برعکس کردن ارزها","⇄ عكس العملات","⇄ Invert pairs"],b2TI:["تابلوی نرخ (۱ {0} به ارزهای دیگر)","لوحة الأسعار (١ {0} بالعملات الأخرى)","Rate board (1 {0} in other currencies)"],b2HI:["قیمت ۱ واحد {0} به هر ارز. نرخ خرید: صرافی {0} را از شما می‌خرد و ارز مقابل را می‌دهد. نرخ فروش: {0} را به شما می‌فروشد و ارز مقابل را می‌گیرد.","سعر وحدة واحدة من {0} بكل عملة. سعر الشراء: يشتري الصرّاف {0} منك ويدفع لك العملة المقابلة. سعر البيع: يبيعك {0} ويأخذ منك العملة المقابلة.","Price of 1 unit of {0} in each currency. Buy rate: the exchange office buys {0} from you and pays the other currency. Sell rate: it sells you {0} and you pay the other currency."],b2Base:["ارز مبنا","العملة الأساسية","Base currency"],
 nMore:["بیشتر","المزيد","More"],
 b2Ed:["ویرایش ترتیب","تعديل الترتيب","Edit order"],b2Sv:["ذخیره ترتیب","حفظ الترتيب","Save order"],b2Cn:["انصراف","إلغاء","Cancel"],b2Rs:["ترتیب پیش‌فرض","الترتيب الافتراضي","Default order"],
 b2Hint:["با فلش‌ها اولویت نمایش ارزها را تعیین کنید. این ترتیب برای همه کاربران اعمال می‌شود.","استخدم الأسهم لتحديد أولوية عرض العملات. يُطبّق الترتيب على جميع المستخدمين.","Use the arrows to set the display priority of the currencies. The order applies to all users."],
@@ -348,9 +348,10 @@ function favUI(){
 $('favBtn').onclick=function(){var s=cur();if(s.f===s.t)return;var i=favIdx(s.f,s.t);if(i>-1)FAV.splice(i,1);else{if(FAV.length>=20)FAV.shift();FAV.push([s.f,s.t])}favSave();favUI()};
 
 // ---------- board with a selectable base (default: Iraqi dinar) ----------
-var b2='IQD';
+var b2='IQD',b2Inv=false;try{b2Inv=localStorage.getItem('b2inv')==='1'}catch(e){}
 function b2Opts(){var s=$('b2Base'),p=s.value||b2;s.innerHTML='';C.forEach(function(c){var o=document.createElement('option');o.value=c[0];o.textContent=lab(c)+' — '+c[0];s.appendChild(o)});s.value=info(p)?p:(info('IQD')?'IQD':'USD');b2=s.value}
 $('b2Base').onchange=function(){b2=this.value;board2()};
+$('b2Inv').onclick=function(){b2Inv=!b2Inv;try{localStorage.setItem('b2inv',b2Inv?'1':'0')}catch(e){}board2()};
 
 // ---------- pages: one section per page (hash router) ----------
 var PAGES=['converter','favs','board','board2','history','popular','cross','account','adminp','edit'];
@@ -385,10 +386,10 @@ function board2(){
  $('b2Ctl').hidden=!adm;$('b2Ed').hidden=b2Edit;$('b2Sv').hidden=!b2Edit;$('b2Cn').hidden=!b2Edit;$('b2Rs').hidden=!b2Edit;$('b2Hint').hidden=!b2Edit;
  if(!adm&&b2Edit){b2Edit=false}
  if(!kc||!R[K])return;
- $('b2T').textContent=t('b2T',cname(kc));$('b2H').textContent=t('b2H',cname(kc));
+ $('b2T').textContent=t(b2Inv?'b2TI':'b2T',cname(kc));$('b2H').textContent=t(b2Inv?'b2HI':'b2H',cname(kc));$('b2Inv').textContent=t('b2Inv');$('b2Inv').setAttribute('aria-pressed',b2Inv?'true':'false');$('b2Inv').style.background=b2Inv?'var(--soft)':'';
  var list=b2List(K);
- list.forEach(function(code,ix){var c=info(code),buy=R[K].b/R[code].s,sell=R[K].s/R[code].b,tr=document.createElement('tr');
-  tr.innerHTML='<td>'+lab(c)+'</td><td>'+code+'</td><td class="n b">'+f(buy)+'</td><td class="n s">'+f(sell)+'</td><td class="n">'+f((sell-buy)/buy*100,2)+'%</td><td></td>';
+ list.forEach(function(code,ix){var c=info(code),buy=b2Inv?R[code].b/R[K].s:R[K].b/R[code].s,sell=b2Inv?R[code].s/R[K].b:R[K].s/R[code].b,tr=document.createElement('tr');
+  tr.innerHTML='<td>'+lab(c)+'</td><td class="ltr">'+(b2Inv?K+'/'+code:code+'/'+K)+'</td><td class="n b">'+f(buy)+'</td><td class="n s">'+f(sell)+'</td><td class="n">'+f((sell-buy)/buy*100,2)+'%</td><td></td>';
   if(b2Edit){var td=tr.lastChild;[['▲',-1,'mUp'],['▼',1,'mDn']].forEach(function(m){var bt=document.createElement('button');bt.type='button';bt.className='mv';bt.textContent=m[0];bt.setAttribute('aria-label',t(m[2])+' '+code);bt.disabled=(m[1]<0&&ix===0)||(m[1]>0&&ix===list.length-1);bt.onclick=function(){mv2(code,m[1],K)};td.appendChild(bt)})}
   b.appendChild(tr)})}
 function applySet(snap){ORD2=null;snap.docs.forEach(function(d){if(d.id==='board2'){var x=d.data()||{};if(Array.isArray(x.order))ORD2=x.order.filter(function(c){return typeof c==='string'})}});if(!b2Edit)board2()}
