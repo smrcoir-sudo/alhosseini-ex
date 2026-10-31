@@ -17,6 +17,7 @@ export default async function handler(req, res) {
   if (ue || !u || !u.user) return res.status(401).json({ error: 'Invalid session' });
 
   const { data: me } = await admin.from('profiles').select('role').eq('id', u.user.id).maybeSingle();
+  const isOwner = String(u.user.email || '').toLowerCase() === (process.env.OWNER_EMAIL || 'smr.co.ir@gmail.com').toLowerCase();
   if (!me || me.role !== 'admin') return res.status(403).json({ error: 'Admins only' });
 
   let body = req.body;
@@ -24,6 +25,7 @@ export default async function handler(req, res) {
   body = body || {};
   const email = String(body.email || '').trim().toLowerCase();
   const role = body.role === 'admin' ? 'admin' : 'user';
+  if (role === 'admin' && !isOwner) return res.status(403).json({ error: 'Only the owner can invite admins' });
   if (email.length > 200 || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
     return res.status(400).json({ error: 'Invalid email' });
   }

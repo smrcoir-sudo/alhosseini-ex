@@ -84,3 +84,32 @@ do $$ begin
   alter publication supabase_realtime add table public.docs;
 exception when duplicate_object then null;
 end $$;
+
+-- 4) Only the owner can change roles -------------------------------------
+create or replace function public.guard_role_change() returns trigger
+language plpgsql security definer set search_path = public as $$
+begin
+  if new.role is distinct from old.role
+     and coalesce(auth.role(),'') = 'authenticated'
+     and lower(coalesce(auth.jwt()->>'email','')) <> 'smr.co.ir@gmail.com' then
+    raise exception 'Only the owner can change roles';
+  end if;
+  return new;
+end $$;
+drop trigger if exists profiles_guard_role on public.profiles;
+create trigger profiles_guard_role before update on public.profiles
+  for each row execute function public.guard_role_change();
+
+create or replace function public.set_user_role(target uuid, new_role text) returns void
+language plpgsql security definer set search_path = public as $$
+begin
+  if lower(coalesce(auth.jwt()->>'email','')) <> 'smr.co.ir@gmail.com' then
+    raise exception 'Only the owner can change roles';
+  end if;
+  if new_role not in ('admin','user') then raise exception 'Invalid role'; end if;
+  if exists (select 1 from public.profiles where id = target and lower(email) = 'smr.co.ir@gmail.com') then
+    raise exception 'The owner role cannot be changed';
+  end if;
+  update public.profiles set role = new_role where id = target;
+end $$;
+grant execute on function public.set_user_role(uuid, text) to authenticated;

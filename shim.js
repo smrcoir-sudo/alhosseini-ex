@@ -118,6 +118,8 @@ if (ok) {
     signIn: async (email, password) => { const { error } = await sb.auth.signInWithPassword({ email, password }); if (error) throw error; },
     signUp: async (email, password, meta) => { const { data, error } = await sb.auth.signUp({ email, password, options: { emailRedirectTo: location.origin, data: meta || {} } }); if (error) throw error; return !!data.session; },
     users: async () => { const { data, error } = await sb.from('profiles').select('*'); if (error) throw error; return data || []; },
+    setRole: async (id, role) => { const { error } = await sb.rpc('set_user_role', { target: id, new_role: role }); if (error) throw error; },
+    email: async () => { const { data } = await sb.auth.getSession(); return ((data.session && data.session.user && data.session.user.email) || '').toLowerCase(); },
     signOut: () => sb.auth.signOut(),
     reset: async (email) => { const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: location.origin }); if (error) throw error; },
     setPassword: async (password) => { const { error } = await sb.auth.updateUser({ password }); if (error) throw error; },
