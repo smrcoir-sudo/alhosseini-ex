@@ -15,11 +15,18 @@ returns boolean language sql stable security definer set search_path = public as
   select exists (select 1 from public.profiles where id = auth.uid() and role = 'admin');
 $$;
 
+alter table public.profiles add column if not exists first_name text, add column if not exists last_name text, add column if not exists phone text;
+
 create or replace function public.handle_new_user()
 returns trigger language plpgsql security definer set search_path = public as $$
+declare fn text := left(nullif(trim(new.raw_user_meta_data->>'first_name'),''),80);
+        ln text := left(nullif(trim(new.raw_user_meta_data->>'last_name'),''),80);
+        ph text := left(nullif(trim(new.raw_user_meta_data->>'phone'),''),30);
 begin
-  insert into public.profiles (id, email, name)
-  values (new.id, new.email, coalesce(nullif(new.raw_user_meta_data->>'name',''), split_part(new.email,'@',1)))
+  insert into public.profiles (id, email, name, first_name, last_name, phone)
+  values (new.id, new.email,
+          coalesce(nullif(trim(coalesce(fn,'')||' '||coalesce(ln,'')),''), nullif(new.raw_user_meta_data->>'name',''), split_part(new.email,'@',1)),
+          fn, ln, ph)
   on conflict (id) do nothing;
   return new;
 end $$;

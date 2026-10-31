@@ -217,6 +217,8 @@ footer{text-align:center;color:var(--muted);font-size:.85rem;padding:0 16px 32px
 <div class="scrim" id="authScrim" hidden style="z-index:60"></div>
 <form class="sheet" id="authBox" hidden style="z-index:61;bottom:auto;top:12vh;padding:18px;gap:10px" autocomplete="on">
 <h2 id="authT" style="margin:0"></h2><p class="hint" id="authH" style="margin:0"></p>
+<div id="auNmW" hidden><div class="row" style="margin:0"><div><label for="auFn" data-i="authFn"></label><input id="auFn" type="text" autocomplete="given-name" maxlength="80"></div><div><label for="auLn" data-i="authLn"></label><input id="auLn" type="text" autocomplete="family-name" maxlength="80"></div></div>
+<div style="margin-top:10px"><label for="auPh" data-i="authPh"></label><input id="auPh" type="tel" class="ltr" autocomplete="tel" inputmode="tel" maxlength="30" placeholder="+964..."></div></div>
 <div><label for="auE" data-i="authEmail"></label><input id="auE" type="email" class="ltr" autocomplete="email"></div>
 <div id="auPwW"><label for="auP" data-i="authPw"></label><input id="auP" type="password" class="ltr" autocomplete="current-password" minlength="8"></div>
 <div class="err" id="auErr" aria-live="polite"></div>
